@@ -165,9 +165,16 @@
         }
         url += '/' + path;
 
+        let wsProtocols = [];
+        let apikey = readQueryVariable("mason_apikey", "")
+        if (apikey !== "") {
+            wsProtocols.push("mason-apikey-" + apikey);
+        }
+
         // Creating a new RFB object will start a new connection
         rfb = new RFB(document.getElementById('screen'), url,
-                      { credentials: { password: password } });
+                      { credentials: { password: password },
+                        wsProtocols: wsProtocols });
 
         // Add listeners to important events from the RFB module
         rfb.addEventListener("connect",  connectedToServer);
@@ -178,6 +185,10 @@
         // Set parameters that can be changed on an active connection
         rfb.viewOnly = readQueryVariable('view_only', false);
         rfb.scaleViewport = readQueryVariable('scale', false);
+
+        rfb.resizeSession = false;
+        rfb.showDotCursor = true;
+        rfb.scaleViewport = true;
     </script>
 </head>
 

@@ -278,6 +278,14 @@ export default class Websock {
     }
 
     _recv_message(e) {
+        if (typeof e.data === "string") {
+            Log.Info("data: " + e.data);
+            if (e.data === "device:ok") {
+                this._websocket.send("client:ok");
+                Log.Info("connection established");
+            }
+            return;
+        }
         this._decode_message(e.data);
         if (this.rQlen > 0) {
             this._eventHandlers.message();
